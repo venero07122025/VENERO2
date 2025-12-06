@@ -6,6 +6,8 @@ import Navbar from "@/components/Navbar";
 import Table from "@/components/Table";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
+import { BiChevronLeft } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 // XLSX
 import * as XLSX from "xlsx";
@@ -18,6 +20,7 @@ export default function Transacciones() {
     const [list, setList] = useState([]);
     const [date, setDate] = useState(null);
     const [pdfMake, setPdfMake] = useState(null);
+    const router = useRouter();
 
     // ==========================================================
     // CARGAR PDFMAKE DINÁMICAMENTE (compatible con Next.js)
@@ -158,6 +161,10 @@ export default function Transacciones() {
         pdfMake.createPdf(doc).download("transacciones.pdf");
     };
 
+    const goBack = () => {
+        router.back();
+    };
+
     // ==========================================================
     // RENDER
     // ==========================================================
@@ -166,6 +173,14 @@ export default function Transacciones() {
             <Navbar />
 
             <div className="container mx-auto p-6">
+                <button
+                    onClick={goBack}
+                    className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
+                >
+                    <BiChevronLeft className="w-6 h-6" />
+                    <span>Volver</span>
+                </button>
+
                 <h1 className="text-3xl font-bold mb-6">Historial de Transacciones</h1>
 
                 {/* CALENDARIO */}

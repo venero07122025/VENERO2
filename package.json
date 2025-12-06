@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.86.0",
-    "next": "16.0.5",
+    "next": "^16.0.7",
     "pdfmake": "^0.2.20",
     "react": "19.2.0",
     "react-calendar": "^6.0.0",
@@ -18,6 +18,7 @@
     "react-hook-form": "^7.67.0",
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.5.0",
+    "stripe": "^20.0.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
@@ -25,6 +26,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "baseline-browser-mapping": "^2.9.3",
     "eslint": "^9",
     "eslint-config-next": "16.0.5",
     "tailwindcss": "^4",

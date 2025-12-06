@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
@@ -23,6 +22,7 @@ export default function Configuracion() {
         if (error) {
             console.error(error);
             toast.error("Error cargando configuración");
+            return;
         }
 
         if (!data) {
@@ -57,28 +57,37 @@ export default function Configuracion() {
             .update(payload)
             .eq("id", 1);
 
-        if (error) toast.error("Error guardando");
-        else toast.success("Guardado");
+        if (error) {
+            console.error(error);
+            toast.error("Error guardando");
+        } else {
+            toast.success("Guardado correctamente");
+            fetchSettings(); // refrescar valores
+        }
     };
 
-    // Mientras carga
     if (settings === null) return "Cargando...";
 
-    // Caso NO existe configuración
     if (settings === "no-config")
         return (
             <ProtectedRoute>
                 <Navbar />
                 <div className="p-6 max-w-xl mx-auto">
+                    <button
+                        onClick={goBack}
+                        className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
+                    >
+                        <BiChevronLeft className="w-6 h-6" />
+                        <span>Volver</span>
+                    </button>
 
                     <h1 className="text-3xl font-bold mb-4">Configuración</h1>
-
                     <p className="text-red-500 font-semibold mb-4">
-                        No existe una configuración en la base de datos.
+                        No existe configuración en la base de datos.
                     </p>
 
                     <button
-                        className="mt-4 w-full py-3 bg-green-600 text-white rounded-xl"
+                        className="mt-4 w-full py-3 bg-green-600 text-white rounded-xl cursor-pointer hover:bg-green-700 transition"
                         onClick={async () => {
                             const { error } = await supabase
                                 .from("settings")
@@ -89,7 +98,7 @@ export default function Configuracion() {
                                         stripe_pk: "",
                                         stripe_sk: "",
                                         receiver_account: "",
-                                    }
+                                    },
                                 ]);
 
                             if (error) toast.error("Error creando configuración");
@@ -108,22 +117,17 @@ export default function Configuracion() {
     return (
         <ProtectedRoute>
             <Navbar />
-
-            <div className="p-6 max-w-xl mx-auto">
-
-                {/* Botón volver */}
+            <div className="p-6 container mx-auto">
                 <button
                     onClick={goBack}
                     className="mb-6 flex items-center text-gray-700 hover:text-black"
                 >
-                    <BiChevronLeft className="w-6 h-6" />
-                    Volver
+                    <BiChevronLeft className="w-6 h-6" /> Volver
                 </button>
 
                 <h1 className="text-3xl font-bold mb-6">Configuración</h1>
 
                 <div className="space-y-4">
-
                     {/* Mode */}
                     <select
                         value={settings.stripe_mode}
@@ -160,7 +164,10 @@ export default function Configuracion() {
                     <input
                         value={settings.receiver_account || ""}
                         onChange={(e) =>
-                            setSettings({ ...settings, receiver_account: e.target.value })
+                            setSettings({
+                                ...settings,
+                                receiver_account: e.target.value,
+                            })
                         }
                         placeholder="Receiver Account (opcional)"
                         className="w-full border p-3 rounded"
@@ -169,7 +176,7 @@ export default function Configuracion() {
                     {/* Save */}
                     <button
                         onClick={save}
-                        className="w-full py-3 bg-blue-600 text-white rounded-xl"
+                        className="w-full py-3 bg-blue-600 text-white rounded-xl cursor-pointer hover:bg-blue-700 transition"
                     >
                         Guardar
                     </button>

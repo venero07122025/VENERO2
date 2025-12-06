@@ -1,5 +1,5 @@
-// import Stripe from "stripe";
+import Stripe from "stripe";
 
-// export const stripe = new Stripe(process.env.STRIPE_SECRET!, {
-//     apiVersion: "2024-06-20",
-// }); 
+export const stripe = new Stripe(process.env.STRIPE_TEST_SECRET!, {
+    // apiVersion: "2024-06-20",
+});
