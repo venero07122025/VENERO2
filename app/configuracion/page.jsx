@@ -128,8 +128,7 @@ export default function Configuracion() {
                 <h1 className="text-3xl font-bold mb-6">Configuración</h1>
 
                 <div className="space-y-4">
-                    {/* Modo */}
-                    <select
+                    bbb  <select
                         value={settings.stripe_mode}
                         onChange={(e) =>
                             setSettings({ ...settings, stripe_mode: e.target.value })
@@ -140,7 +139,6 @@ export default function Configuracion() {
                         <option value="live">Modo Live</option>
                     </select>
 
-                    {/* PK */}
                     <input
                         value={settings.stripe_pk || ""}
                         onChange={(e) =>
@@ -150,7 +148,6 @@ export default function Configuracion() {
                         className="w-full border p-3 rounded"
                     />
 
-                    {/* SK */}
                     <input
                         value={settings.stripe_sk || ""}
                         onChange={(e) =>
@@ -160,7 +157,6 @@ export default function Configuracion() {
                         className="w-full border p-3 rounded"
                     />
 
-                    {/* Receiver Account */}
                     <input
                         value={settings.receiver_account || ""}
                         onChange={(e) =>
@@ -173,7 +169,6 @@ export default function Configuracion() {
                         className="w-full border p-3 rounded"
                     />
 
-                    {/* Botón Guardar */}
                     <button
                         onClick={save}
                         className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"

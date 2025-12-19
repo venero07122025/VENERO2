@@ -1,197 +1,111 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navbar from "@/components/Navbar";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "./CheckoutForm";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { BiChevronLeft } from "react-icons/bi";
 
 export default function Ventas() {
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        formState: { errors },
-    } = useForm();
-    const router = useRouter();
+    const [amount, setAmount] = useState("");
+    const [clientSecret, setClientSecret] = useState(null);
+    const [stripePromise, setStripePromise] = useState(null);
+    const [amountError, setAmountError] = useState("");
 
-    const [expValue, setExpValue] = useState("");
+    const createCheckout = async () => {
+        setAmountError("");
 
-    const handleExpChange = (e) => {
-        let value = e.target.value.replace(/\D/g, "");
+        const numericAmount = Number(amount);
 
-        if (value.length >= 3) {
-            value = value.slice(0, 4);
-            value = value.replace(/(\d{2})(\d{1,2})/, "$1/$2");
+        if (!numericAmount || numericAmount < 2) {
+            const msg = "El monto mínimo es S/. 2.00";
+            setAmountError(msg);
+            toast.error(msg);
+            return;
         }
 
-        setExpValue(value);
-        setValue("exp", value, { shouldValidate: true });
-    };
+        toast.loading("Creando pago...");
 
-    const onSubmit = async (values) => {
         try {
-            ("📤 Enviando al backend:", values);
-
-            toast.loading("Procesando pago...");
-
-            const res = await fetch("/api/payment", {
+            const res = await fetch("/api/checkout", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(values),
+                body: JSON.stringify({ amount: numericAmount }),
             });
 
-            ("📥 Respuesta cruda:", res);
-
-            const json = await res.json();
-            ("📥 JSON:", json);
-
+            const text = await res.text();
             toast.dismiss();
 
-            if (!res.ok) {
-                console.error("❌ Error desde el server:", json.error);
-                return toast.error(json.error);
+            if (!text) {
+                toast.error("Respuesta vacía del servidor");
+                return;
             }
 
-            toast.success("Pago aprobado 👍");
+            const data = JSON.parse(text);
 
-        } catch (e) {
+            if (!res.ok) {
+                toast.error(data.error || "Error creando checkout");
+                return;
+            }
+
+            setClientSecret(data.clientSecret);
+            setStripePromise(loadStripe(data.publishableKey));
+
+        } catch (err) {
             toast.dismiss();
-            console.error("🔥 Error en submit:", e);
-            toast.error("Error procesando pago");
+            console.error(err);
+            toast.error("Error inesperado");
         }
     };
-
-    const goBack = () => router.back();
 
     return (
         <ProtectedRoute>
             <Navbar />
 
-            <div className="p-6 max-w-xl mx-auto">
-                <button
-                    onClick={goBack}
-                    className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
-                >
-                    <BiChevronLeft className="w-6 h-6" />
-                    <span>Volver</span>
-                </button>
-
+            <div className="p-6 max-w-md mx-auto">
                 <h1 className="text-3xl font-bold mb-6">Venta Forzada</h1>
 
-                <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-                    {/* MONTO */}
-                    <input
-                        {...register("amount", {
-                            required: "El monto es obligatorio",
-                            min: { value: 1, message: "Mínimo S/ 1" },
-                            max: { value: 10000, message: "Máximo S/ 10000" },
-                        })}
-                        className="w-full border p-3 rounded outline-none"
-                        type="number"
-                        step="0.01"
-                        placeholder="Monto (S/)"
-                    />
-                    {errors.amount && (
-                        <p className="text-red-500 text-sm">{errors.amount.message}</p>
-                    )}
+                {!clientSecret && (
+                    <>
+                        <input
+                            type="number"
+                            min="2"
+                            step="0.01"
+                            placeholder="Monto (S/)"
+                            value={amount}
+                            onChange={(e) => {
+                                setAmount(e.target.value);
+                                setAmountError("");
+                            }}
+                            className={`w-full border p-3 rounded mb-1 ${amountError ? "border-red-500" : ""
+                                }`}
+                        />
 
-                    {/* TARJETA */}
-                    <input
-                        {...register("card_number", {
-                            required: "Número obligatorio",
-                            validate: (value) =>
-                                /^\d{16}$/.test(value) ||
-                                "Debe ser un número de 16 dígitos",
-                        })}
-                        className="w-full border p-3 rounded outline-none"
-                        placeholder="Número de tarjeta"
-                        maxLength={16}
-                        inputMode="numeric"
-                    />
-                    {errors.card_number && (
-                        <p className="text-red-500 text-sm">{errors.card_number.message}</p>
-                    )}
+                        {amountError && (
+                            <p className="text-sm text-red-600 mb-4">
+                                {amountError}
+                            </p>
+                        )}
 
-                    {/* EXP + CVC */}
-                    <div className="flex gap-3">
-                        <div className="flex flex-col gap-2 w-full">
-                            {/* EXP */}
-                            <input
-                                {...register("exp", {
-                                    required: "Obligatorio",
-                                    validate: (value) => {
-                                        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(value))
-                                            return "Formato inválido (MM/YY)";
+                        <button
+                            onClick={createCheckout}
+                            className="w-full bg-blue-600 text-white py-3 rounded"
+                        >
+                            Continuar
+                        </button>
+                    </>
+                )}
 
-                                        const [mm, yy] = value.split("/");
-                                        const month = parseInt(mm, 10);
-                                        const year = 2000 + parseInt(yy, 10);
-
-                                        const now = new Date();
-                                        const currentMonth = now.getMonth() + 1;
-                                        const currentYear = now.getFullYear();
-
-                                        if (year < currentYear) return "Tarjeta expirada";
-                                        if (year === currentYear && month < currentMonth)
-                                            return "Tarjeta expirada";
-
-                                        return true;
-                                    },
-                                })}
-                                value={expValue}
-                                onChange={handleExpChange}
-                                className="w-full border p-3 rounded outline-none"
-                                placeholder="MM/YY"
-                                maxLength={5}
-                                inputMode="numeric"
-                            />
-
-                            {errors.exp && (
-                                <p className="text-red-500 text-sm">{errors.exp.message}</p>
-                            )}
-                        </div>
-                        <div className="flex flex-col gap-2 w-full">
-                            {/* CVC */}
-                            <input
-                                {...register("cvc", {
-                                    required: "Obligatorio",
-                                    pattern: {
-                                        value: /^[0-9]{3,4}$/,
-                                        message: "CVC inválido",
-                                    },
-                                })}
-                                className="w-full border p-3 rounded outline-none"
-                                placeholder="CVC"
-                                maxLength={4}
-                                inputMode="numeric"
-                            />
-
-                            {errors.cvc && (
-                                <p className="text-red-500 text-sm">{errors.cvc.message}</p>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* ZIP */}
-                    <input
-                        {...register("zip", {
-                            required: "Código postal obligatorio",
-                        })}
-                        className="w-full border p-3 rounded outline-none"
-                        placeholder="ZIP"
-                    />
-                    {errors.zip && (
-                        <p className="text-red-500 text-sm">{errors.zip.message}</p>
-                    )}
-
-                    {/* BOTÓN */}
-                    <button className="w-full py-3 bg-blue-600 text-white rounded-xl cursor-pointer">
-                        Procesar Pago
-                    </button>
-                </form>
+                {clientSecret && stripePromise && (
+                    <Elements
+                        stripe={stripePromise}
+                        options={{ clientSecret }}
+                    >
+                        <CheckoutForm />
+                    </Elements>
+                )}
             </div>
         </ProtectedRoute>
     );
