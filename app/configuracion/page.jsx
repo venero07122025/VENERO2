@@ -128,7 +128,7 @@ export default function Configuracion() {
                 <h1 className="text-3xl font-bold mb-6">Configuración</h1>
 
                 <div className="space-y-4">
-                    bbb  <select
+                    <select
                         value={settings.stripe_mode}
                         onChange={(e) =>
                             setSettings({ ...settings, stripe_mode: e.target.value })
