@@ -65,7 +65,7 @@ export default function Ventas() {
             <Navbar />
 
             <div className="p-6 max-w-md mx-auto">
-                <h1 className="text-3xl font-bold mb-6">Venta Forzada</h1>
+                <h1 className="text-3xl font-bold mb-6">Venta Diaria</h1>
 
                 {!clientSecret && (
                     <>
