@@ -46,3 +46,26 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 control /name Microsoft.CredentialManager
 
 # Le da a "Credenciales de Windows" y verifica la parte de "git:http://github.com" que seria en donde la credencial antigua se almacenaría, y le daria a quitar, luego pone la cuenta cuenta asi como vimos anteriormente, de igual manera me comunica alguna duda
+
+
+
+# Fernando, una consulta, para que usted pueda probar dintintos pkkey y el otro secretkey, simplemente seria cambiar el que se tiene a otro? por ejemplo, tenemos esto:
+
+si es que usted cambia ahi las credenciales por ejemplo de otro país, no habría ningun problema? o que es exactamente lo que le pide?
+
+te explico mira lo que pasa por ejemplo ahora 
+
+en ambas web se esta poniendo el mismo pk y sk
+
+en todo caso, la solucion seria mas rapida cambiarla manualmente desde la base de dats
+
+pero si todas usan 1 sola base de datos seria l mismo
+
+mmmm, en ese caso, lo que sucede es que como tenemos duplicado el mismo codigo pero esta desplegado con diferentes nombres, siempre toma la base de datos primera, en este caso, todos estos
+
+como se observa, ambos estan hechos con este mismo codigo, entonces, lo que se deberia hacer seria crear distintos repositorios y dupkicar todo el codigo, esa es la cuenta que usamos anteriormente?
+
+la que me diste acceso si
+las que duplique que es venero 2 y 3 es en otra cuenta en es caso, se necesitaria que se cambie a esa cuenta por favor para explicarle
+
+perfecto, recuerde que ya tenemos un venero1, en este  caso seria un venero 2, ahora, como sería, como le comentaba, en todos los veneros utiliza este mismo codigo, seria simplemente dujplicar todo el codigo y solamente caembiar la tabla a la que apuntaría, en este caso, a esta. para que no tome siempre las mismas credenciales, hagamos un ejemplo le parece?de acuerdo, perfecto
