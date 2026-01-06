@@ -40,7 +40,7 @@ export async function POST(req) {
 
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(Number(amount) * 100),
-            currency: settings_venero_2.currency || "pen",
+            currency: "mxn",
             payment_method_types: ["card"],
         });
 
