@@ -49,7 +49,7 @@ export async function POST(req) {
         ("⚡ Creando PaymentIntent...");
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Math.round(Number(body.amount) * 100),
-            currency: "mxn",
+            currency: "usd",
             payment_method_types: ["card"],
 
             payment_method_data: {
