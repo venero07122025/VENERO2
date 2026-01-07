@@ -18,21 +18,52 @@ export default function CheckoutForm() {
         e.preventDefault();
 
         if (!stripe || !elements) return;
-
         setLoading(true);
 
-        const { error } = await stripe.confirmPayment({
+        const result = await stripe.confirmPayment({
             elements,
+            redirect: "if_required",
             confirmParams: {
                 return_url: `${window.location.origin}/ventas?success=true`,
             },
         });
 
-        if (error) {
-            toast.error(error.message);
+        if (result.error) {
+            const err = result.error;
+
+            // 🔴 Errores reales
+            if (err.type === "card_error") {
+                if (err.decline_code === "fraudulent") {
+                    toast.error("El banco bloqueó la transacción por seguridad.");
+                } else if (err.decline_code === "insufficient_funds") {
+                    toast.error("Fondos insuficientes.");
+                } else {
+                    toast.error(err.message);
+                }
+            } else {
+                toast.error("Error inesperado al procesar el pago.");
+            }
+
             setLoading(false);
             return;
         }
+
+        const paymentIntent = result.paymentIntent;
+
+        // ✅ Pago completado
+        if (paymentIntent.status === "succeeded") {
+            toast.success("Pago realizado con éxito 🎉");
+            return;
+        }
+
+        // 🔐 Stripe lanzó 3DS (esto es OK)
+        if (paymentIntent.status === "requires_action") {
+            // Stripe manejará el challenge automáticamente
+            setLoading(false);
+            return;
+        }
+
+        setLoading(false);
     };
 
     return (
