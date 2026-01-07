@@ -91,7 +91,7 @@ export default function Ventas() {
 
                         <button
                             onClick={createCheckout}
-                            className="w-full bg-blue-600 text-white py-3 rounded"
+                            className="w-full bg-blue-600 text-white py-3 rounded cursor-pointer"
                         >
                             Continuar
                         </button>

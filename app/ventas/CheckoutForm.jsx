@@ -32,7 +32,7 @@ export default function CheckoutForm() {
             <PaymentElement />
             <button
                 type="submit"
-                className="mt-4 w-full bg-black text-white py-3 rounded"
+                className="mt-4 w-full bg-black text-white py-3 rounded cursor-pointer"
             >
                 Pagar
             </button>
