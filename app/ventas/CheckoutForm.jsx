@@ -23,19 +23,15 @@ export default function CheckoutForm() {
 
         const { error } = await stripe.confirmPayment({
             elements,
-            redirect: "if_required",
             confirmParams: {
                 return_url: `${window.location.origin}/ventas?success=true`,
             },
         });
 
         if (error) {
-            if (error.code === "card_declined") {
-                toast.error("Tu banco rechazó el pago. Esto puede pasar en compras internacionales. Intenta con otra tarjeta.");
-            } else {
-                toast.error(error.message);
-            }
+            toast.error(error.message);
             setLoading(false);
+            return;
         }
     };
 
@@ -44,13 +40,7 @@ export default function CheckoutForm() {
             <PaymentElement
                 options={{
                     fields: {
-                        billingDetails: {
-                            name: "always",
-                            email: "always",
-                            address: {
-                                country: "always",
-                            },
-                        },
+                        billingDetails: "auto",
                     },
                 }}
             />

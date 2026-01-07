@@ -44,7 +44,7 @@ export async function POST(req) {
             automatic_payment_methods: { enabled: true },
             payment_method_options: {
                 card: {
-                    request_three_d_secure: "automatic",
+                    request_three_d_secure: "any",
                 },
             },
         });

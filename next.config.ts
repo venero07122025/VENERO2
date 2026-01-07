@@ -10,10 +10,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: `
               default-src 'self';
-              
+
               script-src
                 'self'
                 'unsafe-inline'
+                'unsafe-eval'
                 https://js.stripe.com
                 https://m.stripe.network
                 https://*.stripe.com
@@ -25,7 +26,8 @@ const nextConfig: NextConfig = {
                 https://js.stripe.com
                 https://hooks.stripe.com
                 https://geoissuer.cardinalcommerce.com
-                https://*.cardinalcommerce.com;
+                https://*.cardinalcommerce.com
+                https://*.stripe.com;
 
               connect-src
                 'self'
@@ -47,7 +49,9 @@ const nextConfig: NextConfig = {
 
               style-src
                 'self'
-                'unsafe-inline';
+                'unsafe-inline'
+                https://js.stripe.com
+                https://*.stripe.com;
             `.replace(/\s{2,}/g, " ").trim(),
           },
         ],
@@ -56,4 +60,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
