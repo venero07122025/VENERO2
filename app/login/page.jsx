@@ -73,7 +73,7 @@ export default function Login() {
                         })}
                         type="email"
                         className={`w-full px-4 py-3 border rounded-xl outline-none text-[15px] 
-                            ${errors.email ? "border-red-400" : "focus:ring-2 focus:ring-blue-500"}`}
+                            ${errors.email ? "border-red-400" : "focus:ring-blue-500"}`}
                         placeholder="Correo electrónico"
                         autoComplete="email"
                     />
@@ -94,7 +94,7 @@ export default function Login() {
                         })}
                         type={showPassword ? "text" : "password"}
                         className={`w-full px-4 py-3 border rounded-xl outline-none text-[15px] 
-                            ${errors.password ? "border-red-400" : "focus:ring-2 focus:ring-blue-500"}`}
+                            ${errors.password ? "border-red-400" : "focus:ring-blue-500"}`}
                         placeholder="Contraseña"
                         autoComplete="current-password"
                     />
@@ -120,7 +120,7 @@ export default function Login() {
 
                 <button
                     disabled={loading}
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all disabled:opacity-70"
+                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all disabled:opacity-70 cursor-pointer"
                 >
                     {loading ? "Entrando…" : "Ingresar"}
                 </button>
