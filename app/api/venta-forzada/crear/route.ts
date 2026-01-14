@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
 
+const AMEX_SAFE_CURRENCIES = ["usd", "eur"];
+
 export async function POST(req: Request) {
     try {
         const { amount } = await req.json();
@@ -15,13 +17,13 @@ export async function POST(req: Request) {
             process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
         );
 
-        const { data: config } = await supabase
+        const { data: config, error: configError } = await supabase
             .from("settings_venero_2")
             .select("stripe_sk")
             .eq("id", 1)
             .single();
 
-        if (!config?.stripe_sk) {
+        if (configError || !config?.stripe_sk) {
             return NextResponse.json(
                 { error: "Stripe no configurado" },
                 { status: 500 }
@@ -35,7 +37,11 @@ export async function POST(req: Request) {
             req.headers.get("cf-ipcountry") ||
             "US";
 
-        const currency = getCurrencyByCountry(country);
+        let currency = getCurrencyByCountry(country);
+
+        if (!AMEX_SAFE_CURRENCIES.includes(currency)) {
+            currency = "usd";
+        }
 
         const orderId = `ORD-${Date.now()}`;
 
@@ -49,13 +55,16 @@ export async function POST(req: Request) {
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
-            customer_email: "auto@forzado.com",
             payment_method_types: ["card"],
+            customer_email: "auto@forzado.com",
+            billing_address_collection: "auto",
             line_items: [
                 {
                     price_data: {
                         currency,
-                        product_data: { name: "Venta Forzada" },
+                        product_data: {
+                            name: "Venta Forzada",
+                        },
                         unit_amount: Math.round(amount * 100),
                     },
                     quantity: 1,
@@ -65,18 +74,20 @@ export async function POST(req: Request) {
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/ventas/resultado?status=Rechazada&orden=${orderId}&monto=${amount}`,
         });
 
-        return NextResponse.json({ redirectUrl: session.url });
+        return NextResponse.json({
+            redirectUrl: session.url,
+        });
 
     } catch (err: any) {
         console.error("Venta forzada error:", err);
         return NextResponse.json(
-            { error: err.message },
+            { error: err.message || "Error interno" },
             { status: 500 }
         );
     }
 }
 
-function getCurrencyByCountry(country: string) {
+function getCurrencyByCountry(country: string): string {
     const map: Record<string, string> = {
         US: "usd",
         MX: "mxn",
