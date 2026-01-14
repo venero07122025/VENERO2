@@ -35,15 +35,13 @@ export async function POST(req: Request) {
         await supabase.from("orders").insert({
             external_id: orderId,
             amount,
-            currency: "usd",
             status: "pending",
         });
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
-            payment_method_types: ["card"],
             customer_email: "auto@forzado.com",
-            billing_address_collection: "auto",
+            payment_method_types: ["card"],
             line_items: [
                 {
                     price_data: {
@@ -61,9 +59,9 @@ export async function POST(req: Request) {
         return NextResponse.json({ redirectUrl: session.url });
 
     } catch (err: any) {
-        console.error(err);
+        console.error("Venta forzada error:", err);
         return NextResponse.json(
-            { error: "Error interno" },
+            { error: err.message },
             { status: 500 }
         );
     }
