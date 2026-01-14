@@ -118,6 +118,7 @@ import toast from "react-hot-toast";
 import { FaSpinner } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { BiChevronLeft } from "react-icons/bi";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Ventas() {
     const [amount, setAmount] = useState("");
@@ -167,44 +168,46 @@ export default function Ventas() {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-16 p-6 border rounded-lg shadow">
+        <ProtectedRoute>
+            <div className="max-w-md mx-auto mt-16 p-6 border rounded-lg shadow">
 
-            <button
-                onClick={goBack}
-                className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
-            >
-                <BiChevronLeft className="w-6 h-6" />
-                <span>Volver</span>
-            </button>
-            
-            <h1 className="text-2xl font-bold mb-6 text-center">
-                Venta Forzada
-            </h1>
+                <button
+                    onClick={goBack}
+                    className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
+                >
+                    <BiChevronLeft className="w-6 h-6" />
+                    <span>Volver</span>
+                </button>
 
-            <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="w-full border p-3 mb-4 outline-none rounded"
-                placeholder="Monto en USD"
-                disabled={loading}
-            />
+                <h1 className="text-2xl font-bold mb-6 text-center">
+                    Venta Forzada
+                </h1>
 
-            <button
-                onClick={iniciarPago}
-                disabled={loading}
-                className={`w-full flex items-center justify-center gap-2 py-3 rounded text-white transition ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-black hover:bg-gray-800 cursor-pointer"
-                    }`}
-            >
-                {loading ? (
-                    <>
-                        <FaSpinner className="animate-spin" />
-                        Procesando pago…
-                    </>
-                ) : (
-                    "Continuar"
-                )}
-            </button>
-        </div>
+                <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="w-full border p-3 mb-4 outline-none rounded"
+                    placeholder="Monto en USD"
+                    disabled={loading}
+                />
+
+                <button
+                    onClick={iniciarPago}
+                    disabled={loading}
+                    className={`w-full flex items-center justify-center gap-2 py-3 rounded text-white transition ${loading ? "bg-gray-600 cursor-not-allowed" : "bg-black hover:bg-gray-800 cursor-pointer"
+                        }`}
+                >
+                    {loading ? (
+                        <>
+                            <FaSpinner className="animate-spin" />
+                            Procesando pago…
+                        </>
+                    ) : (
+                        "Continuar"
+                    )}
+                </button>
+            </div>
+        </ProtectedRoute>
     );
 }
