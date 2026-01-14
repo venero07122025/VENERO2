@@ -19,7 +19,6 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Si ya está logueado → Dashboard
     useEffect(() => {
         const checkSession = async () => {
             const { data } = await supabase.auth.getSession();
@@ -30,7 +29,6 @@ export default function Login() {
 
     const togglePassword = () => setShowPassword((prev) => !prev);
 
-    // 🔥 AQUI RECIBES LOS DATOS CORRECTAMENTE
     const onSubmit = async (values) => {
         try {
             setLoading(true);
