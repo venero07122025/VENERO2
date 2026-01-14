@@ -30,11 +30,20 @@ export async function POST(req: Request) {
 
         const stripe = new Stripe(config.stripe_sk);
 
+        const country =
+            req.headers.get("x-vercel-ip-country") ||
+            req.headers.get("cf-ipcountry") ||
+            "US";
+
+        const currency = getCurrencyByCountry(country);
+
         const orderId = `ORD-${Date.now()}`;
 
         await supabase.from("orders").insert({
             external_id: orderId,
             amount,
+            currency,
+            country,
             status: "pending",
         });
 
@@ -45,7 +54,7 @@ export async function POST(req: Request) {
             line_items: [
                 {
                     price_data: {
-                        currency: "usd",
+                        currency,
                         product_data: { name: "Venta Forzada" },
                         unit_amount: Math.round(amount * 100),
                     },
@@ -65,4 +74,19 @@ export async function POST(req: Request) {
             { status: 500 }
         );
     }
+}
+
+function getCurrencyByCountry(country: string) {
+    const map: Record<string, string> = {
+        US: "usd",
+        MX: "mxn",
+        PE: "pen",
+        CO: "cop",
+        CL: "clp",
+        AR: "ars",
+        BR: "brl",
+        EC: "usd",
+    };
+
+    return map[country] || "usd";
 }
