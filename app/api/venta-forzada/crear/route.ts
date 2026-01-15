@@ -40,8 +40,9 @@ export async function POST(req: Request) {
 
         const session = await stripe.checkout.sessions.create({
             mode: "payment",
-            customer_email: "auto@forzado.com",
             payment_method_types: ["card"],
+            customer_email: "auto@forzado.com",
+            billing_address_collection: "auto",
             line_items: [
                 {
                     price_data: {
@@ -59,9 +60,9 @@ export async function POST(req: Request) {
         return NextResponse.json({ redirectUrl: session.url });
 
     } catch (err: any) {
-        console.error("Venta forzada error:", err);
+        console.error(err);
         return NextResponse.json(
-            { error: err.message },
+            { error: "Error interno" },
             { status: 500 }
         );
     }
