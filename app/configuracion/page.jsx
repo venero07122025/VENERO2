@@ -42,10 +42,11 @@ export default function Configuracion() {
         const { error } = await supabase.from("settings_venero_2").insert([
             {
                 id: 1,
-                stripe_mode: "test",
-                stripe_pk: "",
-                stripe_sk: "",
-                receiver_account: "",
+                izipay_mode: "test",
+                izipay_merchant_code: "",
+                izipay_terminal_code: "",
+                izipay_public_key: "",
+                izipay_secret_key: ""
             },
         ]);
 
@@ -61,11 +62,12 @@ export default function Configuracion() {
         if (!settings_venero_2 || settings_venero_2 === "no-config") return;
 
         const payload = {
-            stripe_mode: settings_venero_2.stripe_mode,
-            stripe_pk: settings_venero_2.stripe_pk || "",
-            stripe_sk: settings_venero_2.stripe_sk || "",
-            receiver_account: settings_venero_2.receiver_account || "",
-            updated_at: new Date(),
+            izipay_mode: settings_venero_2.izipay_mode,
+            izipay_merchant_code: settings_venero_2.izipay_merchant_code,
+            izipay_terminal_code: settings_venero_2.izipay_terminal_code,
+            izipay_public_key: settings_venero_2.izipay_public_key,
+            izipay_secret_key: settings_venero_2.izipay_secret_key,
+            updated_at: new Date()
         };
 
         const { error } = await supabase
@@ -129,9 +131,12 @@ export default function Configuracion() {
 
                 <div className="space-y-4">
                     <select
-                        value={settings_venero_2.stripe_mode}
+                        value={settings_venero_2.izipay_mode}
                         onChange={(e) =>
-                            setsettings_venero_2({ ...settings_venero_2, stripe_mode: e.target.value })
+                            setsettings_venero_2({
+                                ...settings_venero_2,
+                                izipay_mode: e.target.value,
+                            })
                         }
                         className="w-full border p-3 rounded"
                     >
@@ -140,32 +145,50 @@ export default function Configuracion() {
                     </select>
 
                     <input
-                        value={settings_venero_2.stripe_pk || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({ ...settings_venero_2, stripe_pk: e.target.value })
-                        }
-                        placeholder="Stripe Public Key"
-                        className="w-full border p-3 rounded"
-                    />
-
-                    <input
-                        value={settings_venero_2.stripe_sk || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({ ...settings_venero_2, stripe_sk: e.target.value })
-                        }
-                        placeholder="Stripe Secret Key"
-                        className="w-full border p-3 rounded"
-                    />
-
-                    <input
-                        value={settings_venero_2.receiver_account || ""}
+                        value={settings_venero_2.izipay_merchant_code || ""}
                         onChange={(e) =>
                             setsettings_venero_2({
                                 ...settings_venero_2,
-                                receiver_account: e.target.value,
+                                izipay_merchant_code: e.target.value,
                             })
                         }
-                        placeholder="Receiver Account (opcional)"
+                        placeholder="Izipay Merchant Code"
+                        className="w-full border p-3 rounded"
+                    />
+
+                    <input
+                        value={settings_venero_2.izipay_terminal_code || ""}
+                        onChange={(e) =>
+                            setsettings_venero_2({
+                                ...settings_venero_2,
+                                izipay_terminal_code: e.target.value,
+                            })
+                        }
+                        placeholder="Izipay Terminal Code"
+                        className="w-full border p-3 rounded"
+                    />
+
+                    <input
+                        value={settings_venero_2.izipay_public_key || ""}
+                        onChange={(e) =>
+                            setsettings_venero_2({
+                                ...settings_venero_2,
+                                izipay_public_key: e.target.value,
+                            })
+                        }
+                        placeholder="Izipay Public Key"
+                        className="w-full border p-3 rounded"
+                    />
+
+                    <input
+                        value={settings_venero_2.izipay_secret_key || ""}
+                        onChange={(e) =>
+                            setsettings_venero_2({
+                                ...settings_venero_2,
+                                izipay_secret_key: e.target.value,
+                            })
+                        }
+                        placeholder="Izipay Secret Key"
                         className="w-full border p-3 rounded"
                     />
 

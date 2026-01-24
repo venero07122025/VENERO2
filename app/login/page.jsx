@@ -19,31 +19,39 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    useEffect(() => {
-        const checkSession = async () => {
-            const { data } = await supabase.auth.getSession();
-            if (data.session) router.push("/dashboard");
-        };
-        checkSession();
-    }, [router]);
-
     const togglePassword = () => setShowPassword((prev) => !prev);
+
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (user) {
+            router.push("/dashboard");
+        }
+    }, [router]);
 
     const onSubmit = async (values) => {
         try {
             setLoading(true);
 
-            const { error } = await supabase.auth.signInWithPassword({
-                email: values.email,
-                password: values.password,
-            });
+            const { data, error } = await supabase
+                .from("users")
+                .select("*")
+                .eq("email", values.email)
+                .eq("password", values.password)
+                .single();
 
-            if (error) {
+            if (error || !data) {
                 toast.error("Credenciales inválidas");
                 return;
             }
 
-            toast.success("Accediendo...");
+            // Guardamos sesión simple en localStorage
+            localStorage.setItem("user", JSON.stringify({
+                id: data.id,
+                email: data.email,
+                role: data.role
+            }));
+
+            toast.success(`Bienvenido ${data.role}`);
             router.push("/dashboard");
 
         } finally {

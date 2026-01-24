@@ -1,6 +1,5 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -9,18 +8,13 @@ export default function ProtectedRoute({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const validate = async () => {
-            const { data } = await supabase.auth.getSession();
+        const user = localStorage.getItem("user");
 
-            if (!data.session) {
-                router.push("/login");
-                return;
-            }
-
+        if (!user) {
+            router.replace("/login");
+        } else {
             setLoading(false);
-        };
-
-        validate();
+        }
     }, [router]);
 
     if (loading) {

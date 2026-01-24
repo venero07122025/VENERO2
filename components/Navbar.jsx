@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 
 export default function Navbar() {
     const router = useRouter();
 
-    const logout = async () => {
-        await supabase.auth.signOut();
-        router.push("/login");
+    const logout = () => {
+        localStorage.removeItem("user");
+
+        router.replace("/login");
     };
 
     return (

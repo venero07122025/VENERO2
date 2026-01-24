@@ -13,20 +13,10 @@ export default function Dashboard() {
     const [transacciones, setTransacciones] = useState(0);
 
     useEffect(() => {
-        async function fetchRole() {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session) return;
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) return;
 
-            const { data } = await supabase
-                .from("users")
-                .select("role")
-                .eq("id", session.user.id)
-                .single();
-
-            setRole(data?.role || "operador");
-        }
-
-        fetchRole();
+        setRole(user.role);
     }, []);
 
     useEffect(() => {
@@ -34,11 +24,16 @@ export default function Dashboard() {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            const { data: trx } = await supabase
+            const { data: trx, error } = await supabase
                 .from("transactions")
                 .select("*")
                 .gte("created_at", today.toISOString())
-                .eq("status", "succeeded")
+                .eq("status", "succeeded");
+
+            if (error) {
+                console.error("Error cargando transacciones:", error.message);
+                return;
+            }
 
             const totalHoy = trx?.reduce((acc, t) => acc + Number(t.amount), 0) || 0;
 

@@ -34,20 +34,16 @@ export default function UsuariosPage() {
     // -------------------------------------
     // 1. Validar si es admin
     // -------------------------------------
-    const checkRole = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
+    const checkRole = () => {
+        const user = JSON.parse(localStorage.getItem("user"));
 
         if (!user) return;
 
-        const { data } = await supabase
-            .from("users")
-            .select("role")
-            .eq("id", user.id)
-            .single();
-
-        if (data?.role === "admin") setIsAdmin(true);
+        if (user.role === "admin") {
+            setIsAdmin(true);
+        } else {
+            setIsAdmin(false);
+        }
     };
 
     // -------------------------------------

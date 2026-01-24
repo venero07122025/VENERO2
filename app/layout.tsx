@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "VeneroPeru",
-  description: "Sistema de gestión de ventas utilizando POS",
+  description: "Sistema de gestión de ventas utilizando POS WEB",
 };
 
 export default function RootLayout({
