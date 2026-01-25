@@ -43,10 +43,12 @@ export default function Configuracion() {
             {
                 id: 1,
                 izipay_mode: "test",
-                izipay_merchant_code: "",
-                izipay_terminal_code: "",
-                izipay_public_key: "",
-                izipay_secret_key: ""
+                izipay_username_test: "",
+                izipay_password_test: "",
+                izipay_public_key_test: "",
+                izipay_username_live: "",
+                izipay_password_live: "",
+                izipay_public_key_live: "",
             },
         ]);
 
@@ -63,10 +65,15 @@ export default function Configuracion() {
 
         const payload = {
             izipay_mode: settings_venero_2.izipay_mode,
-            izipay_merchant_code: settings_venero_2.izipay_merchant_code,
-            izipay_terminal_code: settings_venero_2.izipay_terminal_code,
-            izipay_public_key: settings_venero_2.izipay_public_key,
-            izipay_secret_key: settings_venero_2.izipay_secret_key,
+
+            izipay_username_test: settings_venero_2.izipay_username_test,
+            izipay_password_test: settings_venero_2.izipay_password_test,
+            izipay_public_key_test: settings_venero_2.izipay_public_key_test,
+
+            izipay_username_live: settings_venero_2.izipay_username_live,
+            izipay_password_live: settings_venero_2.izipay_password_live,
+            izipay_public_key_live: settings_venero_2.izipay_public_key_live,
+
             updated_at: new Date()
         };
 
@@ -138,59 +145,91 @@ export default function Configuracion() {
                                 izipay_mode: e.target.value,
                             })
                         }
-                        className="w-full border p-3 rounded"
+                        className="w-full border p-3 rounded outline-none"
                     >
                         <option value="test">Modo Test</option>
                         <option value="live">Modo Live</option>
                     </select>
 
-                    <input
-                        value={settings_venero_2.izipay_merchant_code || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({
-                                ...settings_venero_2,
-                                izipay_merchant_code: e.target.value,
-                            })
-                        }
-                        placeholder="Izipay Merchant Code"
-                        className="w-full border p-3 rounded"
-                    />
+                    {settings_venero_2.izipay_mode === "test" && (
+                        <>
+                            <input
+                                value={settings_venero_2.izipay_username_test || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_username_test: e.target.value,
+                                    })
+                                }
+                                placeholder="Usuario Izipay TEST"
+                                className="w-full border p-3 rounded"
+                            />
 
-                    <input
-                        value={settings_venero_2.izipay_terminal_code || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({
-                                ...settings_venero_2,
-                                izipay_terminal_code: e.target.value,
-                            })
-                        }
-                        placeholder="Izipay Terminal Code"
-                        className="w-full border p-3 rounded"
-                    />
+                            <input
+                                value={settings_venero_2.izipay_password_test || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_password_test: e.target.value,
+                                    })
+                                }
+                                placeholder="Password TEST"
+                                className="w-full border p-3 rounded"
+                            />
 
-                    <input
-                        value={settings_venero_2.izipay_public_key || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({
-                                ...settings_venero_2,
-                                izipay_public_key: e.target.value,
-                            })
-                        }
-                        placeholder="Izipay Public Key"
-                        className="w-full border p-3 rounded"
-                    />
+                            <input
+                                value={settings_venero_2.izipay_public_key_test || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_public_key_test: e.target.value,
+                                    })
+                                }
+                                placeholder="Public Key TEST"
+                                className="w-full border p-3 rounded"
+                            />
+                        </>
+                    )}
 
-                    <input
-                        value={settings_venero_2.izipay_secret_key || ""}
-                        onChange={(e) =>
-                            setsettings_venero_2({
-                                ...settings_venero_2,
-                                izipay_secret_key: e.target.value,
-                            })
-                        }
-                        placeholder="Izipay Secret Key"
-                        className="w-full border p-3 rounded"
-                    />
+                    {settings_venero_2.izipay_mode === "live" && (
+                        <>
+                            <input
+                                value={settings_venero_2.izipay_username_live || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_username_live: e.target.value,
+                                    })
+                                }
+                                placeholder="Usuario Izipay LIVE"
+                                className="w-full border p-3 rounded"
+                            />
+
+                            <input
+                                value={settings_venero_2.izipay_password_live || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_password_live: e.target.value,
+                                    })
+                                }
+                                placeholder="Password LIVE"
+                                className="w-full border p-3 rounded"
+                            />
+
+                            <input
+                                value={settings_venero_2.izipay_public_key_live || ""}
+                                onChange={(e) =>
+                                    setsettings_venero_2({
+                                        ...settings_venero_2,
+                                        izipay_public_key_live: e.target.value,
+                                    })
+                                }
+                                placeholder="Public Key LIVE"
+                                className="w-full border p-3 rounded"
+                            />
+                        </>
+                    )}
 
                     <button
                         onClick={save}

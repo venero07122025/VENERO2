@@ -66,10 +66,38 @@ audio {
 }
 
 @media only screen and (min-width: 320px) and (max-width: 980px) {
+
   .container-header,
   .container,
   .container-footer {
     width: 100%;
     padding: 0 20px;
   }
+}
+
+.kr-embedded {
+  font-family: system-ui, sans-serif;
+}
+
+.kr-payment-form {
+  border: none !important;
+  background: transparent !important;
+}
+
+.kr-field {
+  border-radius: 6px !important;
+  border: 1px solid #d1d5db !important;
+  padding: 10px !important;
+}
+
+.kr-payment-button {
+  background: #16a34a !important;
+  color: white !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  font-weight: 600 !important;
+}
+
+.kr-payment-button:hover {
+  background: #15803d !important;
 }
