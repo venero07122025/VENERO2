@@ -1,8 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { BiChevronLeft } from "react-icons/bi";
 
 export default function Ventas() {
+  const router = useRouter();
   const [formToken, setFormToken] = useState(null);
   const [publicKey, setPublicKey] = useState(null);
   const [amount, setAmount] = useState("0.00");
@@ -128,8 +131,18 @@ export default function Ventas() {
     setAmount("1.00");
   };
 
+  const goBack = () => router.push("/dashboard");
+
   return (
     <div className="p-6 flex flex-col gap-4 items-center justify-center h-screen">
+      <button
+        onClick={goBack}
+        className="mb-6 flex items-center text-gray-700 hover:text-black transition cursor-pointer"
+      >
+        <BiChevronLeft className="w-6 h-6" />
+        <span>Volver</span>
+      </button>
+
       <div>
         <label>Monto a pagar (PEN)</label>
         <input
