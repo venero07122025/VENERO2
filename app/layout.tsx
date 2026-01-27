@@ -70,7 +70,12 @@ img-src
 style-src
   'self'
   'unsafe-inline'
-  https://static.micuentaweb.pe;
+  https://static.micuentaweb.pe
+  https://fonts.googleapis.com;
+
+font-src
+  'self'
+  https://fonts.gstatic.com;
 "
         />
       </head>
