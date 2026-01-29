@@ -22,7 +22,7 @@ export default function Header() {
                     onClick={() => router.push("/#inicio")}
                     className="cursor-pointer font-bold tracking-wide text-xl text-zinc-900"
                 >
-                    LARKANA
+                    VENERO
                     <span className="font-light text-zinc-500 ml-1">Arquitectura</span>
                 </div>
 
@@ -39,22 +39,32 @@ export default function Header() {
                     ))}
                 </nav>
 
-                {/* Carrito */}
-                <button
-                    onClick={() => router.push("/checkout")}
-                    className="relative flex items-center gap-3 bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-800 transition cursor-pointer"
-                >
-                    <span className="text-sm font-semibold">
-                        S/. {total.toFixed(2)}
-                    </span>
-                    <FiShoppingCart size={18} />
+                <div className="flex items-center gap-4">
+                    {/* Login */}
+                    <button
+                        onClick={() => router.push("/login")}
+                        className="relative flex items-center gap-3 bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-800 transition cursor-pointer"
+                    >
+                        <span className="text-sm font-semibold">Login</span>
+                    </button>
 
-                    {items.length > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
-                            {items.length}
+                    {/* Carrito */}
+                    <button
+                        onClick={() => router.push("/checkout")}
+                        className="relative flex items-center gap-3 bg-zinc-900 text-white px-4 py-2 rounded-full hover:bg-zinc-800 transition cursor-pointer"
+                    >
+                        <span className="text-sm font-semibold">
+                            S/. {total.toFixed(2)}
                         </span>
-                    )}
-                </button>
+                        <FiShoppingCart size={18} />
+
+                        {items.length > 0 && (
+                            <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                                {items.length}
+                            </span>
+                        )}
+                    </button>
+                </div>
             </div>
         </header>
     );

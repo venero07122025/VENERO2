@@ -138,7 +138,6 @@ export default function Checkout() {
     return (
         <div className="min-h-screen bg-zinc-50 flex items-center justify-center px-6">
             <div className="bg-white shadow-xl rounded-2xl w-full max-w-xl p-8 relative">
-
                 <button
                     onClick={goBack}
                     className="mb-6 flex items-center text-gray-600 hover:text-black transition cursor-pointer"

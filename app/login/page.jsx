@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { BiChevronLeft } from "react-icons/bi";
 
 export default function Login() {
     const router = useRouter();
@@ -59,12 +60,24 @@ export default function Login() {
         }
     };
 
+    const goBack = () => {
+        router.push("/");
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="bg-white p-8 shadow-xl rounded-2xl w-96 space-y-6 animate-fadeIn"
             >
+                <button
+                    onClick={goBack}
+                    className="mb-6 flex items-center text-gray-600 hover:text-black transition cursor-pointer"
+                >
+                    <BiChevronLeft className="w-6 h-6" />
+                    <span>Volver</span>
+                </button>
+
                 <h1 className="text-2xl font-bold text-center">Iniciar Sesión</h1>
 
                 {/* EMAIL INPUT */}
@@ -126,7 +139,7 @@ export default function Login() {
 
                 <button
                     disabled={loading}
-                    className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all disabled:opacity-70 cursor-pointer"
+                    className="w-full py-3 bg-black hover:bg-black/80 text-white rounded-xl font-semibold transition-all disabled:opacity-70 cursor-pointer"
                 >
                     {loading ? "Entrando…" : "Ingresar"}
                 </button>
