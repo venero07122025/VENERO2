@@ -188,7 +188,7 @@ export default function Checkout() {
                 <button
                     onClick={pagar}
                     disabled={loading}
-                    className={`w-full py-3 rounded-lg text-white font-semibold transition cursor-pointer ${loading ? "bg-gray-500" : "bg-green-600 hover:bg-green-700"
+                    className={`w-full py-3 rounded-lg text-white font-semibold transition cursor-pointer ${loading ? "bg-gray-500" : "bg-black hover:bg-black/80"
                         }`}
                 >
                     {loading ? "Generando pago..." : "Pagar con tarjeta"}
