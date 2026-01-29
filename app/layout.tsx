@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/components/CartContext";
+import WhatsAppWidget from "@/components/WhatsAppWidget";
 
 import { Toaster } from "react-hot-toast";
 
@@ -83,8 +85,11 @@ font-src
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
-        <Toaster position="top-right" reverseOrder={false} />
+        <CartProvider>
+          {children}
+          <Toaster position="top-center" reverseOrder={false} />
+        </CartProvider>
+        <WhatsAppWidget />
       </body>
     </html>
   );
