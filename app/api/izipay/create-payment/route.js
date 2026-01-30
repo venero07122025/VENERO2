@@ -8,7 +8,16 @@ export async function POST(req) {
         const body = await req.json();
         console.log("BODY RECIBIDO:", body);
 
-        const { amount } = body;
+        const { amount, customer } = body;
+
+        const {
+            email,
+            firstName,
+            lastName,
+            address,
+            city,
+            phoneNumber,
+        } = customer || {};
 
         const { data: config, error } = await supabase
             .from("settings_venero_2")
@@ -72,8 +81,16 @@ export async function POST(req) {
             currency: "PEN",
             orderId: "ORD-" + Date.now(),
             customer: {
-                email: "cliente@correo.com",
-            },
+                email: email || "venero-cliente@gmail.com",
+                billingDetails: {
+                    firstName: firstName || "Nombre",
+                    lastName: lastName || "Apellido",
+                    address: address || "Direccion",
+                    city: city || "Lima",
+                    country: "PE",
+                    phoneNumber: phoneNumber || "999999999",
+                }
+            }
         };
 
         console.log("PAYLOAD A IZIPAY:", payload);

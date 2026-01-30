@@ -106,7 +106,17 @@ export default function Checkout() {
             const res = await fetch("/api/izipay/create-payment", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: monto.toFixed(2) }),
+                body: JSON.stringify({
+                    amount: monto.toFixed(2),
+                    customer: {
+                        email: "venero-cliente@gmail.com",
+                        firstName: "Jose",
+                        lastName: "Perez",
+                        address: "Av. Siempre Viva 742",
+                        city: "Lima",
+                        phoneNumber: "999999999",
+                    }
+                }),
             });
 
             const data = await res.json();
