@@ -80,17 +80,34 @@ export async function POST(req) {
             amount: Math.round(Number(amount) * 100),
             currency: "PEN",
             orderId: "ORD-" + Date.now(),
+            formAction: "PAYMENT",
+
             customer: {
                 email: email || "venero-cliente@gmail.com",
+
                 billingDetails: {
-                    firstName: firstName || "Nombre",
-                    lastName: lastName || "Apellido",
-                    address: address || "Direccion",
+                    firstName: firstName || "Jose",
+                    lastName: lastName || "Perez",
+                    identityType: "DNI_PER",
+                    identityCode: "70707070",
+                    address: address || "Av. Siempre Viva 742",
                     city: city || "Lima",
                     country: "PE",
                     phoneNumber: phoneNumber || "999999999",
+                    category: "PRIVATE"
                 }
-            }
+            },
+
+            metadata: {
+                cybersource_mdd_12: email || "venero-cliente@gmail.com",
+                cybersource_mdd_13: phoneNumber || "999999999",
+                cybersource_mdd_14: "01-70707070", // 01 = DNI
+                cybersource_mdd_17: "NO",          // cliente frecuente
+                cybersource_mdd_22: "01",          // invitado
+                cybersource_mdd_24: "BAJO"         // riesgo declarado
+            },
+
+            strongAuthentication: "DISABLED"
         };
 
         console.log("PAYLOAD A IZIPAY:", payload);
