@@ -151,6 +151,7 @@ export async function POST(req) {
         return NextResponse.json({
             formToken: result.answer.formToken,
             publicKey: izipay_public_key,
+            orderId: payload.orderId,
         });
 
     } catch (err) {
