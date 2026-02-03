@@ -140,6 +140,21 @@ export async function POST(req) {
             );
         }
 
+        // registrar el pago como pending
+        const { error: insertError } = await supabase.from("payments").insert({
+            order_id: orderId,
+            status: "PENDING",
+            raw: result,
+        });
+
+        if (insertError) {
+            console.error("❌ Error guardando payment:", insertError);
+            toast.error("Error guardando payment");
+        } else {
+            console.log("✅ Payment registrado como PENDING");
+            toast.success("Payment registrado como Pendiente");
+        }
+
         console.log("FORM TOKEN OK:", result.answer.formToken);
 
         console.log("ENVIANDO AL FRONT:");
@@ -151,7 +166,7 @@ export async function POST(req) {
         return NextResponse.json({
             formToken: result.answer.formToken,
             publicKey: izipay_public_key,
-            orderId: payload.orderId,
+            orderId,
         });
 
     } catch (err) {
