@@ -73,13 +73,15 @@ export async function POST(req) {
             );
         }
 
+        const orderId = "ORD-" + Date.now();
+
         const endpoint =
             "https://api.micuentaweb.pe/api-payment/V4/Charge/CreatePayment";
 
         const payload = {
             amount: Math.round(Number(amount) * 100),
             currency: "PEN",
-            orderId: "ORD-" + Date.now(),
+            orderId,
             formAction: "PAYMENT",
 
             customer: {
@@ -149,10 +151,8 @@ export async function POST(req) {
 
         if (insertError) {
             console.error("❌ Error guardando payment:", insertError);
-            toast.error("Error guardando payment");
         } else {
             console.log("✅ Payment registrado como PENDING");
-            toast.success("Payment registrado como Pendiente");
         }
 
         console.log("FORM TOKEN OK:", result.answer.formToken);

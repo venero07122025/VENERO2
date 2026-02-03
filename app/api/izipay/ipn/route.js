@@ -20,13 +20,12 @@ export async function POST(req) {
             .single();
 
         if (error || !config) {
-            console.error("❌ No se pudo leer configuración Supabase");
+            console.error("No se pudo leer configuración Supabase");
             return NextResponse.json({ error: "Config error" }, { status: 500 });
         }
 
         const isTest = config.izipay_mode === "test";
 
-        // 🔐 Validar firma solo en LIVE
         if (!isTest) {
             const password = config.izipay_password_live;
             const computedSignature = crypto
@@ -35,17 +34,14 @@ export async function POST(req) {
                 .digest("base64");
 
             if (computedSignature !== signature) {
-                console.error("❌ Firma inválida IPN");
-                return NextResponse.json(
-                    { error: "Invalid signature" },
-                    { status: 401 }
-                );
+                console.error("Firma inválida IPN");
+                return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
             }
         } else {
-            console.log("⚠️ Modo TEST: firma no validada");
+            console.log("Modo TEST: firma no validada");
         }
 
-        console.log("✅ IPN aceptada");
+        console.log("IPN aceptada");
 
         const paymentStatus = data?.answer?.orderStatus;
         const orderId = data?.answer?.orderId;
@@ -55,7 +51,6 @@ export async function POST(req) {
         console.log("ORDER:", orderId);
         console.log("TX:", transactionId);
 
-        // 🔄 Actualizar si existe, si no insertar
         const { data: existing } = await supabase
             .from("payments")
             .select("id")
@@ -82,7 +77,7 @@ export async function POST(req) {
 
         return NextResponse.json({ received: true });
     } catch (err) {
-        console.error("🔥 IPN ERROR:", err);
+        console.error("IPN ERROR:", err);
         return NextResponse.json({ error: "IPN error" }, { status: 500 });
     }
 }
